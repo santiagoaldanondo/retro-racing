@@ -1,4 +1,4 @@
-var canvas, context, board, tiles, display;
+var canvas, ctx, board, tiles, display;
 var NUM_OF_TILES = 6;
 
 // Array where the images of the different tiles are stored
@@ -14,7 +14,7 @@ var playerX = 0,
 
 // These are the last indexes of width and height, so the real width and height are +1 
 var worldWidth = 50,
-    worldHeight = 30;
+    worldHeight = 50;
 
 // // Create special portions of the map (like clusters and paths) and push them into an array
 var specialTerrain = [];
@@ -42,7 +42,7 @@ function loadMap(map) {
         for (var row = 0; row < worldHeight + 1; row++) {
             mapArray[row] = [];
             for (var col = 0; col < worldWidth + 1; col++) {
-                mapArray[row][col] = Math.floor(Math.random() * (NUM_OF_TILES + 1));
+                mapArray[row][col] = Math.floor(Math.random() * (1));
             }
         }
         for (var i = 0; i < specialTerrain.length; i++) {
@@ -164,7 +164,7 @@ $(document).ready(function() {
 
     // Create canvas
     canvas = document.getElementById("canvas");
-    context = canvas.getContext("2d");
+    ctx = canvas.getContext("2d");
 
     // Canvas elements are not focusable by default. You need to set a tabIndex for it first.
     canvas.tabIndex = 0;
@@ -252,18 +252,35 @@ $(document).ready(function() {
     function draw() {
 
         // Clears the whole viewport
-        context.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
         for (y = 0; y <= vHeight; y++) {
             for (x = 0; x <= vWidth; x++) {
                 theX = x * vTileSize;
                 theY = y * vTileSize;
-                context.drawImage(tiles[board[y + vY][x + vX]], theX, theY, vTileSize, vTileSize);
+                ctx.drawImage(tiles[board[y + vY][x + vX]], theX, theY, vTileSize, vTileSize);
             }
         }
-        context.fillStyle = 'red';
-        context.fillRect((playerX - vX) * vTileSize, (playerY - vY) * vTileSize, vTileSize, vTileSize);
+        ctx.fillStyle = 'red';
+        ctx.fillRect((playerX - vX) * vTileSize, (playerY - vY) * vTileSize, vTileSize, vTileSize);
+
+        drawLines();
+    }
+
+    function drawLines() {
+        // Quadratric curves example
+        ctx.lineWidth = 30;
+        ctx.beginPath();
+        ctx.moveTo(200, 200);
+        ctx.quadraticCurveTo(200, 100, 500, 100);
+        ctx.quadraticCurveTo(600, 100, 600, 300);
+        ctx.quadraticCurveTo(600, 500, 800, 300);
+        ctx.quadraticCurveTo(900, 200, 700, 200);
+        ctx.quadraticCurveTo(600, 200, 800, 100);
+        ctx.quadraticCurveTo(1000, 0, 1000, 300);
+        ctx.quadraticCurveTo(1000, 600, 800, 700);
+        ctx.stroke();
     }
 
 });
